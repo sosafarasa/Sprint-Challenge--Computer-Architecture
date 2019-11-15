@@ -36,7 +36,7 @@ class CPU:
             MUL: self.MUL,
             ADD: self.ADD,
             CALL: self.CALL,
-            RET: self.RET
+            RET: self.RET,
             CMP: self.CMP,
             JMP: self.JMP,
             JEQ: self.JEQ,
