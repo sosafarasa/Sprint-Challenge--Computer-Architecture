@@ -75,6 +75,20 @@ class CPU:
         #elif op == "SUB": etc
         elif op == "MUL":
             self.reg[reg_a] *= self.reg[reg_b]
+        elif op == "CMP":
+            self.fl[0] = 0 # G
+            self.fl[1] = 0 # L
+            self.fl[2] = 0 # E
+            if self.reg[reg_a] > self.reg[reg_b]:
+                self.fl[0] = 1
+            elif self.reg[reg_a] < self.reg[reg_b]:
+                self.fl[1] = 1
+            else:
+                self.fl[2] = 1
+        elif op == "JEQ":
+            pass
+        elif op == "JNE":
+            pass
         else:
             raise Exception("Unsupported ALU operation")
 
@@ -86,8 +100,6 @@ class CPU:
 
         print(f"TRACE: %02X | %02X %02X %02X |" % (
             self.pc,
-            #self.fl,
-            #self.ie,
             self.ram_read(self.pc),
             self.ram_read(self.pc + 1),
             self.ram_read(self.pc + 2)
@@ -127,6 +139,15 @@ class CPU:
         ret_add = self.ram[self.reg[self.SP]]
         self.reg[self.SP] += 1
         self.pc = ret_add
+    def CMP(self, operand_a, operand_b):
+        self.alu("CMP", operand_a, operand_b)
+        self.pc += 3
+    def JMP(self, operand_a, operand_b):
+        pass
+    def JEQ(self, operand_a, operand_b):
+        pass
+    def JNE(self, operand_a, operand_b):
+        pass
 
 
     def run(self):
@@ -134,7 +155,7 @@ class CPU:
         running = True
 
         while running:
-            IR = self.ram[self.pc]
+            IR = self.ram[self.pc] # Instruction Register
 
             operand_a = self.ram_read(self.pc +1)
             operand_b = self.ram_read(self.pc +2)
