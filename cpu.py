@@ -11,6 +11,11 @@ MUL  = 0b10100010
 ADD = 0b10100000
 CALL = 0b01010000
 RET = 0b00010001
+CMP = 0b10100111
+JMP = 0b01010100
+JEQ = 0b01010101
+JNE = 0b01010110
+
 
 
 class CPU:
@@ -20,6 +25,7 @@ class CPU:
         """Construct a new CPU."""
         self.ram = [0] * 256
         self.reg = [0] * 8
+        self.fl = [0] * 8
         self.pc = 0
         self.SP = 0x07
         self.dsptchtbl = {
@@ -31,6 +37,10 @@ class CPU:
             ADD: self.ADD,
             CALL: self.CALL,
             RET: self.RET
+            CMP: self.CMP,
+            JMP: self.JMP,
+            JEQ: self.JEQ,
+            JNE: self.JNE
         }
 
 
