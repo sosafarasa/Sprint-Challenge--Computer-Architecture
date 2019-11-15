@@ -72,10 +72,9 @@ class CPU:
 
         if op == "ADD":
             self.reg[reg_a] += self.reg[reg_b]
-        #elif op == "SUB": etc
         elif op == "MUL":
             self.reg[reg_a] *= self.reg[reg_b]
-        elif op == "CMP":
+        elif op == "CMP": # compare flags
             self.fl[0] = 0 # G
             self.fl[1] = 0 # L
             self.fl[2] = 0 # E
@@ -86,9 +85,15 @@ class CPU:
             else:
                 self.fl[2] = 1
         elif op == "JEQ":
-            pass
+            if self.fl[2] == 1:
+                self.JMP(reg_a, reg_b)
+            else:
+                self.pc += 2
         elif op == "JNE":
-            pass
+            if self.fl[2] == 0:
+                self.JMP(reg_a, reg_b)
+            else:
+                self.pc += 2
         else:
             raise Exception("Unsupported ALU operation")
 
@@ -139,15 +144,15 @@ class CPU:
         ret_add = self.ram[self.reg[self.SP]]
         self.reg[self.SP] += 1
         self.pc = ret_add
-    def CMP(self, operand_a, operand_b):
+    def CMP(self, operand_a, operand_b):     # Compare
         self.alu("CMP", operand_a, operand_b)
         self.pc += 3
-    def JMP(self, operand_a, operand_b):
-        pass
-    def JEQ(self, operand_a, operand_b):
-        pass
-    def JNE(self, operand_a, operand_b):
-        pass
+    def JMP(self, operand_a, operand_b):     # Jump
+        self.pc = self.reg[operand_a]
+    def JEQ(self, operand_a, operand_b):     # Jump to E
+        self.alu("JEQ", operand_a, operand_b)
+    def JNE(self, operand_a, operand_b):     # Jump to not E
+        self.alu("JNE", operand_a, operand_b)
 
 
     def run(self):
